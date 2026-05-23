@@ -28,7 +28,7 @@ void MythicPlusNpcSupport::AddMainMenu(Player* player, Creature* creature)
 
     Identifier* i1 = new Identifier();
     i1->id = 1;
-    i1->uiName = "Choose Mythic Plus level";
+    i1->uiName = "Выберете уровень Мифик+";
     i1->optionIcon = GOSSIP_ICON_BATTLE;
     pagedData.data.push_back(i1);
 
@@ -37,7 +37,7 @@ void MythicPlusNpcSupport::AddMainMenu(Player* player, Creature* creature)
     {
         Identifier* resetIdnt = new Identifier();
         resetIdnt->id = 2;
-        resetIdnt->uiName = "Reset Mythic Plus level [CURRENT: " + Acore::ToString(setLevel) + "]";
+        resetIdnt->uiName = "Сбросить уровень Мифик+ [ТЕКУЩИЙ: " + Acore::ToString(setLevel) + "]";
         resetIdnt->optionIcon = GOSSIP_ICON_BATTLE;
         pagedData.data.push_back(resetIdnt);
     }
@@ -73,36 +73,36 @@ void MythicPlusNpcSupport::AddMainMenu(Player* player, Creature* creature)
 
     Identifier* mPlusListIdnt = new Identifier();
     mPlusListIdnt->id = 5;
-    mPlusListIdnt->uiName = "List of all Mythic Plus capable dungeons";
+    mPlusListIdnt->uiName = "Список подземелий с Мифик+";
     pagedData.data.push_back(mPlusListIdnt);
 
     Identifier* standingsRefreshIdnt = new Identifier();
     standingsRefreshIdnt->id = 6;
     std::ostringstream oss;
-    oss << "Mythic Plus standings refresh in: ";
+    oss << "Обновление рейтинга Мифик +: ";
     oss << MythicPlus::Utils::Colored(secsToTimeString((MythicPlus::MYTHIC_SNAPSHOTS_TIMER_FREQ - sMythicPlus->GetMythicSnapshotsTimer()) / 1000), "b50505");
     standingsRefreshIdnt->uiName = oss.str();
     pagedData.data.push_back(standingsRefreshIdnt);
 
     Identifier* standings = new Identifier();
     standings->id = 7;
-    standings->uiName = "Mythic Plus standings -->";
+    standings->uiName = "Текущая таблица Мифик+ ->";
     pagedData.data.push_back(standings);
 
     Identifier* keystoneIdnt = new Identifier();
     keystoneIdnt->id = 8;
     std::ostringstream koss;
-    koss << MythicPlus::Utils::Colored("Acquire Mythic Plus keystone", "700c63");
+    koss << MythicPlus::Utils::Colored("Получить ключ Мифик+", "700c63");
     if (sMythicPlus->GetKeystoneBuyTimer() > 0)
     {
         uint32 playerKeystoneBuyTimer = sMythicPlus->GetKeystoneBuyTimer(player);
-        std::string available = MythicPlus::Utils::GreenColored(" [AVAILABLE NOW]");
+        std::string available = MythicPlus::Utils::GreenColored(" [ДОСТУПНО]");
         if (playerKeystoneBuyTimer > 0)
         {
             uint64 now = MythicPlus::Utils::GameTimeCount();
             uint64 diff = now - playerKeystoneBuyTimer;
             if (diff < sMythicPlus->GetKeystoneBuyTimer() * 60)
-                available = MythicPlus::Utils::RedColored(" [AVAILABLE IN " + secsToTimeString(sMythicPlus->GetKeystoneBuyTimer() * 60 - diff));
+                available = MythicPlus::Utils::RedColored(" [ПОЛУЧИТЬ ЧЕРЕЗ " + secsToTimeString(sMythicPlus->GetKeystoneBuyTimer() * 60 - diff));
         }
         koss << available;
     }
@@ -112,7 +112,7 @@ void MythicPlusNpcSupport::AddMainMenu(Player* player, Creature* creature)
 
     Identifier* randomMythicIdnt = new Identifier();
     randomMythicIdnt->id = 9;
-    randomMythicIdnt->uiName = "See the list of possible random affixes -->";
+    randomMythicIdnt->uiName = "Список возможных случайных усилений ->";
     randomMythicIdnt->optionIcon = GOSSIP_ICON_BATTLE;
     pagedData.data.push_back(randomMythicIdnt);
 
