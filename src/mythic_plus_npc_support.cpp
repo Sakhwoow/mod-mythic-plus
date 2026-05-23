@@ -28,7 +28,7 @@ void MythicPlusNpcSupport::AddMainMenu(Player* player, Creature* creature)
 
     Identifier* i1 = new Identifier();
     i1->id = 1;
-    i1->uiName = "Выберете уровень Мифик+";
+    i1->uiName = "Выберете сложность";
     i1->optionIcon = GOSSIP_ICON_BATTLE;
     pagedData.data.push_back(i1);
 
@@ -37,7 +37,7 @@ void MythicPlusNpcSupport::AddMainMenu(Player* player, Creature* creature)
     {
         Identifier* resetIdnt = new Identifier();
         resetIdnt->id = 2;
-        resetIdnt->uiName = "Сбросить уровень Мифик+ [ТЕКУЩИЙ: " + Acore::ToString(setLevel) + "]";
+        resetIdnt->uiName = "Сбросить сложность [ТЕКУЩИЙ: " + Acore::ToString(setLevel) + "]";
         resetIdnt->optionIcon = GOSSIP_ICON_BATTLE;
         pagedData.data.push_back(resetIdnt);
     }
@@ -45,7 +45,7 @@ void MythicPlusNpcSupport::AddMainMenu(Player* player, Creature* creature)
     {
         Identifier* nothingIdnt = new Identifier();
         nothingIdnt->id = 3;
-        nothingIdnt->uiName = MythicPlus::Utils::Colored("No Mythic Plus level set", "b50505");
+        nothingIdnt->uiName = MythicPlus::Utils::Colored("Ни какой сложности не установлено", "b50505");
         nothingIdnt->optionIcon = GOSSIP_ICON_CHAT;
         pagedData.data.push_back(nothingIdnt);
     }
@@ -73,26 +73,26 @@ void MythicPlusNpcSupport::AddMainMenu(Player* player, Creature* creature)
 
     Identifier* mPlusListIdnt = new Identifier();
     mPlusListIdnt->id = 5;
-    mPlusListIdnt->uiName = "Список подземелий с Мифик+";
+    mPlusListIdnt->uiName = "Список подземелий ";
     pagedData.data.push_back(mPlusListIdnt);
 
     Identifier* standingsRefreshIdnt = new Identifier();
     standingsRefreshIdnt->id = 6;
     std::ostringstream oss;
-    oss << "Обновление рейтинга Мифик +: ";
+    oss << "Обновление таблицы: ";
     oss << MythicPlus::Utils::Colored(secsToTimeString((MythicPlus::MYTHIC_SNAPSHOTS_TIMER_FREQ - sMythicPlus->GetMythicSnapshotsTimer()) / 1000), "b50505");
     standingsRefreshIdnt->uiName = oss.str();
     pagedData.data.push_back(standingsRefreshIdnt);
 
     Identifier* standings = new Identifier();
     standings->id = 7;
-    standings->uiName = "Текущая таблица Мифик+ ->";
+    standings->uiName = "Текущая таблица ->";
     pagedData.data.push_back(standings);
 
     Identifier* keystoneIdnt = new Identifier();
     keystoneIdnt->id = 8;
     std::ostringstream koss;
-    koss << MythicPlus::Utils::Colored("Получить ключ Мифик+", "700c63");
+    koss << MythicPlus::Utils::Colored("Получить ключ ", "700c63");
     if (sMythicPlus->GetKeystoneBuyTimer() > 0)
     {
         uint32 playerKeystoneBuyTimer = sMythicPlus->GetKeystoneBuyTimer(player);
@@ -102,7 +102,7 @@ void MythicPlusNpcSupport::AddMainMenu(Player* player, Creature* creature)
             uint64 now = MythicPlus::Utils::GameTimeCount();
             uint64 diff = now - playerKeystoneBuyTimer;
             if (diff < sMythicPlus->GetKeystoneBuyTimer() * 60)
-                available = MythicPlus::Utils::RedColored(" [ПОЛУЧИТЬ ЧЕРЕЗ " + secsToTimeString(sMythicPlus->GetKeystoneBuyTimer() * 60 - diff));
+                available = MythicPlus::Utils::RedColored(" [БУДЕТ ДОСТУПНО ЧЕРЕЗ " + secsToTimeString(sMythicPlus->GetKeystoneBuyTimer() * 60 - diff));
         }
         koss << available;
     }
@@ -118,7 +118,7 @@ void MythicPlusNpcSupport::AddMainMenu(Player* player, Creature* creature)
 
     Identifier* bye = new Identifier();
     bye->id = 10;
-    bye->uiName = "Nevermind...";
+    bye->uiName = "Не обращайте внимания...";
     pagedData.data.push_back(bye);
 
     pagedData.SortAndCalculateTotals(CompareIdentifierById);
@@ -137,11 +137,11 @@ void MythicPlusNpcSupport::AddMythicPlusLevels(Player* player)
         idnt->id = mlevel.level;
         idnt->optionIcon = GOSSIP_ICON_BATTLE;
         std::ostringstream oss;
-        oss << "Mythic level " << mlevel.level;
-        oss << " (" << mlevel.affixes.size() << " affix(es))";
+        oss << "Уровень  " << mlevel.level;
+        oss << " (" << mlevel.affixes.size() << " усиление)";
         if (mlevel.randomAffixCount > 0)
-            oss << " (" << mlevel.randomAffixCount << " random affix(es))";
-        oss << " -->";
+            oss << " (" << mlevel.randomAffixCount << " случайное усиление)";
+        oss << " ->";
         idnt->uiName = oss.str();
         pagedData.data.push_back(idnt);
     }
@@ -270,7 +270,7 @@ void MythicPlusNpcSupport::AddMythicPlusDungeonListForSnapshots(Player* player, 
     Identifier* mlevelIdnt = new Identifier();
     mlevelIdnt->id = 1;
     std::ostringstream oss;
-    oss << "Selected Mythic Plus level: ";
+    oss << "Выбранная сложность: ";
     if (snapMythicLevel == 0)
         oss << "ALL";
     else
@@ -322,7 +322,7 @@ void MythicPlusNpcSupport::AddMythicPlusSnapshotAllRuns(Player* player, uint32 m
     Identifier* mapIdnt = new Identifier();
     mapIdnt->id = 1;
     std::ostringstream oss;
-    oss << "Mythic Plus top timers for ";
+    oss << "Лучшее время ";
     oss << map->name[locale];
     mapIdnt->uiName = oss.str();
     pagedData.data.push_back(mapIdnt);
@@ -345,28 +345,28 @@ void MythicPlusNpcSupport::AddMythicPlusSnapshotAllRuns(Player* player, uint32 m
             if (snap.totalTime > 0)
             {
                 oss << secsToTimeString(snap.totalTime);
-                oss << " [LIMIT: ";
+                oss << " [ЛИМИТ: ";
                 oss << secsToTimeString(snap.timelimit);
                 oss << "]";
                 if (snap.rewarded)
-                    oss << MythicPlus::Utils::GreenColored(" [REWARDED]");
+                    oss << MythicPlus::Utils::GreenColored(" [ПРОЙДЕНО]");
                 else
-                    oss << MythicPlus::Utils::RedColored(" [NOT REWARDED]");
+                    oss << MythicPlus::Utils::RedColored(" [НЕ ПРОЙДЕНО]");
             }
             else
             {
-                oss << MythicPlus::Utils::RedColored("NOT FINISHED");
-                oss << " [LIMIT: ";
+                oss << MythicPlus::Utils::RedColored("НЕ ЗАКОНЧЕНО");
+                oss << " [ЛИМИТ: ";
                 oss << secsToTimeString(snap.timelimit);
                 oss << "]";
             }
-            oss << " [M+ LEVEL ";
+            oss << " [M+ СЛОЖНОСТЬ ";
             oss << snap.mythicLevel;
             oss << "]";
             if (snap.difficulty == DUNGEON_DIFFICULTY_NORMAL)
-                oss << " [NORMAL]";
+                oss << " [ОБЫЧНЫЙ]";
             else
-                oss << MythicPlus::Utils::Colored(" [HEROIC]", "9e1849");
+                oss << MythicPlus::Utils::Colored(" [ГЕРОИЧЕСКИЙ]", "9e1849");
             idnt->uiName = oss.str();
             pagedData.data.push_back(idnt);
         }
@@ -383,7 +383,7 @@ void MythicPlusNpcSupport::AddMythicPlusAllLevels(Player* player)
 
     Identifier* allIdnt = new Identifier();
     allIdnt->id = 0;
-    allIdnt->uiName = "ALL Mythic Plus levels";
+    allIdnt->uiName = "Все уровни";
     pagedData.data.push_back(allIdnt);
 
     const MythicLevelContainer& mythicLevels = sMythicPlus->GetAllMythicLevels();
@@ -393,7 +393,7 @@ void MythicPlusNpcSupport::AddMythicPlusAllLevels(Player* player)
         idnt->id = mlevel.level;
         idnt->optionIcon = GOSSIP_ICON_BATTLE;
         std::ostringstream oss;
-        oss << "Mythic level " << mlevel.level << " -- >";
+        oss << "Сложность " << mlevel.level << " - >";
         idnt->uiName = oss.str();
         pagedData.data.push_back(idnt);
     }
@@ -540,7 +540,7 @@ void MythicPlusNpcSupport::AddRandomAfixes(Player* player)
 
     Identifier* infoIdnt = new Identifier();
     infoIdnt->id = id++;
-    infoIdnt->uiName = "Some Mythic levels can have a set number of random affixes that will be chosen from this pool. Random affixes are shuffled with each server restart.";
+    infoIdnt->uiName = "На некоторых сложностях может быть задано определенное количество случайных усилений, которые будут выбраны из списка. Случайные усиление меняются при каждом перезапуске сервера.";
     infoIdnt->optionIcon = GOSSIP_ICON_CHAT;
     pagedData.data.push_back(infoIdnt);
 
@@ -552,10 +552,10 @@ void MythicPlusNpcSupport::AddRandomAfixes(Player* player)
             Identifier* idnt = new Identifier();
             idnt->id = 100 + mlevel.level;
             std::ostringstream oss;
-            oss << "Mythic level ";
+            oss << "Сложность";
             oss << mlevel.level;
-            oss << " has ";
-            oss << mlevel.randomAffixCount << " random affixes set -->";
+            oss << " из ";
+            oss << mlevel.randomAffixCount << " списка случайных усилений->";
             idnt->uiName = oss.str();
             pagedData.data.push_back(idnt);
         }
@@ -563,7 +563,7 @@ void MythicPlusNpcSupport::AddRandomAfixes(Player* player)
 
     Identifier* affixesInfoIdnt = new Identifier();
     affixesInfoIdnt->id = 1000 + (id++);
-    affixesInfoIdnt->uiName = "Pool of random affixes:";
+    affixesInfoIdnt->uiName = "Список случайных усилений:";
     affixesInfoIdnt->optionIcon = GOSSIP_ICON_CHAT;
     pagedData.data.push_back(affixesInfoIdnt);
 
@@ -596,7 +596,7 @@ void MythicPlusNpcSupport::AddRandomAffixesForLevel(Player* player, uint32 level
     uint32 id = 1;
     Identifier* levelIdnt = new Identifier();
     levelIdnt->id = id++;
-    levelIdnt->uiName = "Randomly generated affixes for Mythic Level " + Acore::ToString(level);
+    levelIdnt->uiName = "Случайное сгенерированное усиление " + Acore::ToString(level);
     levelIdnt->optionIcon = GOSSIP_ICON_CHAT;
     pagedData.data.push_back(levelIdnt);
 

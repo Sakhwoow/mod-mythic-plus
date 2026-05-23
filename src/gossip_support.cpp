@@ -94,8 +94,8 @@ bool GossipSupport::TakePagedDataAction(Player* player, Creature* /*creature*/, 
 
 void GossipSupport::NoPagedData(Player* player, const PagedData& /*pagedData*/) const
 {
-    AddGossipItemFor(player, GOSSIP_ICON_CHAT, "|cffb50505NOTHING ON THIS PAGE|r", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF);
-    AddGossipItemFor(player, GOSSIP_ICON_CHAT, "<- [First Page]", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF);
+    AddGossipItemFor(player, GOSSIP_ICON_CHAT, "|cffb50505НА ЭТОЙ СТРАНИЦЕ НИЧЕГО НЕТ|r", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF);
+    AddGossipItemFor(player, GOSSIP_ICON_CHAT, "<- [Первая страница]", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF);
 }
 
 bool GossipSupport::_AddPagedData(Player* player, const PagedData& pagedData, uint32 page) const
@@ -115,12 +115,12 @@ bool GossipSupport::_AddPagedData(Player* player, const PagedData& pagedData, ui
     _AddMainPageInfo(player, lowIndex, highIndex, data);
 
     if (page + 1 < pagedData.totalPages)
-        AddGossipItemFor(player, GOSSIP_ICON_CHAT, "[Next] ->", GOSSIP_SENDER_MAIN + 2, GOSSIP_ACTION_INFO_DEF + page + 1);
+        AddGossipItemFor(player, GOSSIP_ICON_CHAT, "[Дальше] ->", GOSSIP_SENDER_MAIN + 2, GOSSIP_ACTION_INFO_DEF + page + 1);
 
     if (pagedData.backMenu)
     {
         uint32 pageZeroSender = _PageZeroSender(pagedData);
-        AddGossipItemFor(player, GOSSIP_ICON_CHAT, "<- [Back]", page == 0 ? pageZeroSender : GOSSIP_SENDER_MAIN + 2, page == 0 ? GOSSIP_ACTION_INFO_DEF : GOSSIP_ACTION_INFO_DEF + page - 1);
+        AddGossipItemFor(player, GOSSIP_ICON_CHAT, "<- [Назад]", page == 0 ? pageZeroSender : GOSSIP_SENDER_MAIN + 2, page == 0 ? GOSSIP_ACTION_INFO_DEF : GOSSIP_ACTION_INFO_DEF + page - 1);
     }
 
     return true;

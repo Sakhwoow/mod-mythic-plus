@@ -259,8 +259,8 @@ void LightningSphereAffix::HandlePeriodicEffectMap(Map* map, uint32 diff)
 std::string LightningSphereAffix::ToString() const
 {
     std::ostringstream oss;
-    oss << "Periodically summons lightning spheres that deal huge damage to players if not killed fast [";
-    oss << MythicPlus::Utils::FormatFloat(chanceOfSpawn) << "% chance to spawn every ";
+    oss << "Периодически вызывает сферы молний, которые наносят огромный урон игрокам, если их быстро не убить [";
+    oss << MythicPlus::Utils::FormatFloat(chanceOfSpawn) << "% появляется в каждом противнике ";
     oss << secsToTimeString(spawnTimerEnd / 1000);
     oss << "]";
     return oss.str();
@@ -306,7 +306,7 @@ void EnemyEnrageAffix::HandlePeriodicEffect(Unit* unit, uint32 diff)
 
 std::string EnemyEnrageAffix::ToString() const
 {
-    return "Enemies (including bosses) can randomly enrage while in combat";
+    return "Враги (включая боссов) могут случайным образом впадать в ярость во время боя.";
 }
 
 void EntanglingRootsAffix::HandlePeriodicEffect(Unit* unit, uint32 diff)
@@ -366,5 +366,5 @@ void EntanglingRootsAffix::HandlePeriodicEffect(Unit* unit, uint32 diff)
 
 std::string EntanglingRootsAffix::ToString() const
 {
-    return "Nearby enemies can cast entangling roots on players, freezing them in place and dealing damage";
+    return "Находящиеся поблизности враги, могут накладывать на игрока опутывающие корни, замораживать из на месте и наносить урон.";
 }
