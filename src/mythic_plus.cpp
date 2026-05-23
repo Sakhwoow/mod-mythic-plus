@@ -177,8 +177,8 @@ void MythicPlus::ProcessStaticAffixes(const MythicLevel* mythicLevel, Creature* 
 void MythicPlus::PrintMythicLevelInfo(const MythicLevel* mythicLevel, const Player* player) const
 {
     ChatHandler handler(player->GetSession());
-    handler.PSendSysMessage("Current Mythic Plus level is {}", mythicLevel->level);
-    handler.PSendSysMessage("Active affix count: {}", mythicLevel->affixes.size());
+    handler.PSendSysMessage("Текущая сложность {}", mythicLevel->level);
+    handler.PSendSysMessage("Активные усиления: {}", mythicLevel->affixes.size());
     uint32 counter = 1;
     for (const auto* affix : mythicLevel->affixes)
         handler.PSendSysMessage("    {}. {}", counter++, affix->ToString());
@@ -1022,7 +1022,7 @@ bool MythicPlus::GiveKeystone(Player* player)
     }
     if (!player->AddItem(KEYSTONE_ENTRY, 1))
     {
-        BroadcastToPlayer(player, "Can't add Mythic Keystone. Check your inventory.");
+        BroadcastToPlayer(player, "Не удалось добавить Мифический ключ. проверьте свой инвентарь.");
         return false;
     }
 

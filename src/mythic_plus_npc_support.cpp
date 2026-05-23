@@ -59,14 +59,14 @@ void MythicPlusNpcSupport::AddMainMenu(Player* player, Creature* creature)
         dungeonLevelIdnt->id = 4;
         dungeonLevelIdnt->optionIcon = GOSSIP_ICON_CHAT;
         std::ostringstream oss;
-        oss << "Current dungeon Mythic Plus level (based on leader): ";
+        oss << "Текущая сложность  (зависит от лидера): ";
         if (leaderLevel == 0)
 
-            oss << MythicPlus::Utils::Colored("NONE (0)", "b50505");
+            oss << MythicPlus::Utils::Colored("НЕ УСТАНОВЛЕНО (0)", "b50505");
         else
             oss << leaderLevel;
         if (!leader)
-            oss << " [LEADER OFFLINE]";
+            oss << " [ЛИДЕР НЕ В ИГРЕ]";
         dungeonLevelIdnt->uiName = oss.str();
         pagedData.data.push_back(dungeonLevelIdnt);
     }
@@ -161,7 +161,7 @@ void MythicPlusNpcSupport::AddMythicPlusLevelInfo(Player* player, uint32 mythicL
     Identifier* idnt = new Identifier();
     idnt->id = ++id;
     idnt->optionIcon = GOSSIP_ICON_BATTLE;
-    idnt->uiName = MythicPlus::Utils::Colored("Click to choose Mythic Level " + Acore::ToString(mythicLevel), "0a4a0e");
+    idnt->uiName = MythicPlus::Utils::Colored("Нажмите, чтобы выбрать данную сложность " + Acore::ToString(mythicLevel), "0a4a0e");
     pagedData.data.push_back(idnt);
 
     const MythicLevel* level = sMythicPlus->GetMythicLevel(mythicLevel);
@@ -169,7 +169,7 @@ void MythicPlusNpcSupport::AddMythicPlusLevelInfo(Player* player, uint32 mythicL
 
     Identifier* timerIdnt = new Identifier();
     timerIdnt->id = ++id;
-    timerIdnt->uiName = "Time limit to get rewards: " + secsToTimeString(level->timeLimit);
+    timerIdnt->uiName = "Ограничение по времени для получения награды: " + secsToTimeString(level->timeLimit);
     pagedData.data.push_back(timerIdnt);
 
     for (int i = 0; i < level->affixes.size(); i++)
@@ -179,11 +179,11 @@ void MythicPlusNpcSupport::AddMythicPlusLevelInfo(Player* player, uint32 mythicL
         Identifier* affixIdnt = new Identifier();
         affixIdnt->id = ++id;
         std::ostringstream oss;
-        oss << "Affix ";
+        oss << "Усиление ";
         oss << i + 1 << ": ";
         oss << affix->ToString();
         if (affix->IsRandom())
-            oss << MythicPlus::Utils::Colored(" [RANDOMLY GENERATED]", "1a0966");
+            oss << MythicPlus::Utils::Colored(" [СЛУЧАЙНОЕ]", "1a0966");
         affixIdnt->uiName = oss.str();
         pagedData.data.push_back(affixIdnt);
     }
@@ -191,7 +191,7 @@ void MythicPlusNpcSupport::AddMythicPlusLevelInfo(Player* player, uint32 mythicL
     Identifier* rewardsIdnt = new Identifier();
     rewardsIdnt->id = ++id;
     rewardsIdnt->optionIcon = GOSSIP_ICON_MONEY_BAG;
-    rewardsIdnt->uiName = MythicPlus::Utils::Colored("-- REWARDS --", "0d852d");
+    rewardsIdnt->uiName = MythicPlus::Utils::Colored("-- НАГРАДА --", "0d852d");
     pagedData.data.push_back(rewardsIdnt);
 
     const MythicReward& reward = level->reward;
@@ -200,7 +200,7 @@ void MythicPlusNpcSupport::AddMythicPlusLevelInfo(Player* player, uint32 mythicL
         Identifier* moneyIdnt = new Identifier();
         moneyIdnt->id = ++id;
         moneyIdnt->optionIcon = GOSSIP_ICON_MONEY_BAG;
-        moneyIdnt->uiName = "Gold: " + MythicPlus::Utils::CopperToMoneyStr(reward.money, false);
+        moneyIdnt->uiName = "Золото: " + MythicPlus::Utils::CopperToMoneyStr(reward.money, false);
         pagedData.data.push_back(moneyIdnt);
     }
 
@@ -247,12 +247,12 @@ void MythicPlusNpcSupport::AddMythicPlusDungeonList(Player* player)
         if (diff == DUNGEON_DIFFICULTY_NORMAL)
         {
             if (MythicPlus::Utils::CanBeHeroic(mapEntry))
-                oss << "NORMAL/HEROIC]";
+                oss << "ОБЫЧНОЕ/ГЕРОИЧЕСКОЕ]";
             else
-                oss << "NORMAL]";
+                oss << "ОБЫЧНОЕ]";
         }
         else
-            oss << "HEROIC ONLY]";
+            oss << "ТОЛЬКО ГЕРОЙЧЕСКИЙ]";
         idnt->uiName = oss.str();
         pagedData.data.push_back(idnt);
     }
@@ -272,7 +272,7 @@ void MythicPlusNpcSupport::AddMythicPlusDungeonListForSnapshots(Player* player, 
     std::ostringstream oss;
     oss << "Выбранная сложность: ";
     if (snapMythicLevel == 0)
-        oss << "ALL";
+        oss << "ВСЕ";
     else
         oss << snapMythicLevel;
     mlevelIdnt->uiName = oss.str();
@@ -294,9 +294,9 @@ void MythicPlusNpcSupport::AddMythicPlusDungeonListForSnapshots(Player* player, 
         idnt->id = mapEntry;
         std::ostringstream oss;
         oss << map->name[locale];
-        oss << " [TOTAL RUNS: ";
+        oss << " [Общее количество: ";
         if (snapshots.empty())
-            oss << MythicPlus::Utils::Colored("NONE", "b50505");
+            oss << MythicPlus::Utils::Colored("Нету", "b50505");
         else
             oss << snapshots.size();
         oss << "]";
@@ -438,9 +438,9 @@ void MythicPlusNpcSupport::AddMythicPlusDungeonSnapshotDetails(Player* player, u
     Identifier* idnt = new Identifier();
     idnt->id = 1;
     std::ostringstream oss;
-    oss << "Mythic Plus run for ";
+    oss << "Мифик+ для прохождения ";
     oss << map->name[locale];
-    oss << " at level ";
+    oss << " сложности ";
     oss << csnap->mythicLevel;
     idnt->uiName = oss.str();
     pagedData.data.push_back(idnt);
@@ -450,9 +450,9 @@ void MythicPlusNpcSupport::AddMythicPlusDungeonSnapshotDetails(Player* player, u
 
     Identifier* startTimeIdnt = new Identifier();
     startTimeIdnt->id = 2;
-    oss << "Run started at ";
+    oss << "Пройдено ";
     oss << MythicPlus::Utils::DateFromSeconds(csnap->startTime);
-    oss << " [UTC TIME]";
+    oss << " [UTC ВРЕМЯ]";
     startTimeIdnt->uiName = oss.str();
     pagedData.data.push_back(startTimeIdnt);
 
@@ -463,15 +463,15 @@ void MythicPlusNpcSupport::AddMythicPlusDungeonSnapshotDetails(Player* player, u
     endTimeIdnt->id = 3;
     if (csnap->totalTime > 0)
     {
-        oss << "Run ended at ";
+        oss << "Прохождение закончилось";
         oss << MythicPlus::Utils::DateFromSeconds(csnap->endTime);
-        oss << " [UTC TIME]";
-        oss << " [DURATION: ";
+        oss << " [UTC ВРЕМЯ]";
+        oss << " [ПРОДОЛЖИТЕЛЬНОСТЬ: ";
         oss << secsToTimeString(csnap->totalTime);
         oss << "]";
     }
     else
-        oss << MythicPlus::Utils::RedColored("Run did not end (yet, or orphaned instance)");
+        oss << MythicPlus::Utils::RedColored("Прохождение не состоялось(потерянный экземпляр)");
     endTimeIdnt->uiName = oss.str();
     pagedData.data.push_back(endTimeIdnt);
 
@@ -481,13 +481,13 @@ void MythicPlusNpcSupport::AddMythicPlusDungeonSnapshotDetails(Player* player, u
     oss.clear();
     if (csnap->totalDeaths > 0)
     {
-        oss << "Deaths: ";
+        oss << "Смерти: ";
         oss << MythicPlus::Utils::RedColored(Acore::ToString(csnap->totalDeaths));
-        oss << ". Time penalty: ";
+        oss << ". Штрафное время: ";
         oss << secsToTimeString(csnap->penaltyOnDeath * csnap->totalDeaths);
     }
     else
-        oss << MythicPlus::Utils::GreenColored("NO DEATHS");
+        oss << MythicPlus::Utils::GreenColored("Без смертей");
     deathsIdnt->uiName = oss.str();
     pagedData.data.push_back(deathsIdnt);
 
@@ -503,12 +503,12 @@ void MythicPlusNpcSupport::AddMythicPlusDungeonSnapshotDetails(Player* player, u
         oss << " [took ";
         oss << secsToTimeString(s.combatTime);
         oss << "]";
-        oss << " [PLAYERS: ";
+        oss << " [Игроки: ";
         oss << MythicPlus::Utils::Colored(s.players, "6e1849");
         oss << "]";
 
         if (s.randomAffixCount > 0)
-            oss << " [RANDOM AFFIXES: " << s.randomAffixCount << "]";
+            oss << " [Случайное усиление: " << s.randomAffixCount << "]";
 
         Identifier* idnt = new Identifier();
         idnt->id = ++id;
@@ -521,9 +521,9 @@ void MythicPlusNpcSupport::AddMythicPlusDungeonSnapshotDetails(Player* player, u
         Identifier* rewardIdnt = new Identifier();
         rewardIdnt->id = ++id;
         if (csnap->rewarded)
-            rewardIdnt->uiName = MythicPlus::Utils::GreenColored("TIMER WAS BEATEN - REWARDS RECEIVED");
+            rewardIdnt->uiName = MythicPlus::Utils::GreenColored("ВРЕМЯ НЕ ВЫШЛО - НАГРАДЫ ПОЛУЧЕНЫ");
         else
-            rewardIdnt->uiName = MythicPlus::Utils::RedColored("NO REWARDS RECEIVED - TIMER LIMIT EXCEEDED");
+            rewardIdnt->uiName = MythicPlus::Utils::RedColored("НАГРАДЫ НЕ ПОЛУЧЕНЫ - ПРЕВЫШЕН ЛИМИТ ВРЕМЕНИ");
         pagedData.data.push_back(rewardIdnt);
     }
 
@@ -635,11 +635,11 @@ bool MythicPlusNpcSupport::TakePagedDataAction(Player* player, Creature* creatur
         {
             if (sMythicPlus->SetCurrentMythicPlusLevel(player, 0))
             {
-                MythicPlus::BroadcastToPlayer(player, "Your Mythic Plus level was reset!");
+                MythicPlus::BroadcastToPlayer(player, "Ваша сложность была сброшена!");
                 MythicPlus::Utils::VisualFeedback(player);
             }
             else
-                MythicPlus::BroadcastToPlayer(player, "You can't reset your Mythic Plus level while in a group.");
+                MythicPlus::BroadcastToPlayer(player, "Вы не можете сбросить сложность, находясь в группе.");
 
             CloseGossipMenuFor(player);
             return true;
@@ -689,11 +689,11 @@ bool MythicPlusNpcSupport::TakePagedDataAction(Player* player, Creature* creatur
         {
             if (sMythicPlus->SetCurrentMythicPlusLevel(player, chosenMythicLevel))
             {
-                MythicPlus::BroadcastToPlayer(player, "Your Mythic Plus level was set to " + Acore::ToString(chosenMythicLevel));
+                MythicPlus::BroadcastToPlayer(player, "Ваша сложность была установлена на " + Acore::ToString(chosenMythicLevel));
                 MythicPlus::Utils::VisualFeedback(player);
             }
             else
-                MythicPlus::BroadcastToPlayer(player, "You can't set your Mythic Plus level while in a group.");
+                MythicPlus::BroadcastToPlayer(player, "Вы не можете установить сложность, находясь в группе.");
 
             CloseGossipMenuFor(player);
             return true;

@@ -32,7 +32,7 @@ public:
             {
                 if (savedDungeon->mythicLevel > 0)
                 {
-                    MythicPlus::BroadcastToPlayer(player, "Tried to join a saved Mythic Plus instance but now the system is disabled.");
+                    MythicPlus::BroadcastToPlayer(player, "Попытка присоедениться к сохраненному экземпляру неудачная, т.к. система отключена.");
                     MythicPlus::FallbackTeleport(player);
                     return;
                 }
@@ -56,7 +56,7 @@ public:
                 if (savedDungeon->mythicLevel > 0 && mythicLevel == nullptr)
                 {
                     // edge case where a dungeon was saved as M+ but now the level does not longer exist (removed from DB)
-                    MythicPlus::BroadcastToPlayer(player, "This dungeon was saved as Mythic Plus but now it's level does no longer exist");
+                    MythicPlus::BroadcastToPlayer(player, "Это подземелье было сохранено как Мифик+, но теперь его уровня больше не существует.");
                     MythicPlus::FallbackTeleport(player);
                     return;
                 }
@@ -66,7 +66,7 @@ public:
 
                 if (player->GetLevel() < DEFAULT_MAX_LEVEL)
                 {
-                    MythicPlus::BroadcastToPlayer(player, "You must be max level in order to join Mythic Plus");
+                    MythicPlus::BroadcastToPlayer(player, "Ваш уровень не соответвует для присоедегнения к Мифик+.");
                     MythicPlus::FallbackTeleport(player);
                     return;
                 }
@@ -80,11 +80,11 @@ public:
 
                 if (!mapData->mythicLevel)
                 {
-                    MythicPlus::BroadcastToPlayer(player, "You have just joined a Mythic Plus dungeon. All affixes have been set and saved for this specific instance.");
+                    MythicPlus::BroadcastToPlayer(player, "Вы только что, вступили в подземелье Мифик+. Все изменения были установлены и сохранены для этого подземелья.");
                     mapData->mythicLevel = mythicLevel;
                 }
                 else
-                    MythicPlus::BroadcastToPlayer(player, "You have joined an in progress Mythic Plus dungeon. All affixes were set and are active for this specific instance.");
+                    MythicPlus::BroadcastToPlayer(player, "Вы присоеденились к проходящему подземелью Мифик+. Все привязи быфли установлены и активированые для данного подземелья.");
 
                 sMythicPlus->PrintMythicLevelInfo(mapData->mythicLevel, player);
 
@@ -95,39 +95,39 @@ public:
                     mapData->updateTimer = diff * 1000;
                     if (diff + mapData->GetPenaltyTime() <= mapData->timeLimit)
                     {
-                        oss << "Mythic Plus dungeon is in progress. Current timer: ";
+                        oss << "Подземелье с режимом Мифик+ продолжается. Текущий таймер: ";
                         oss << secsToTimeString(diff);
-                        oss << ". Beat this timer to get loot: ";
+                        oss << ". Уложитесь в отведенное время, чтобы получить награду: ";
                         oss << secsToTimeString(mapData->timeLimit);
                     }
                     else
                     {
-                        oss << "Mythic Plus dungeon is in progress but no loot will be received. ";
-                        oss << "Limit timer: " << secsToTimeString(mapData->timeLimit);
-                        oss << ". Current timer: " << secsToTimeString(diff);
+                        oss << "Мифик+ сложность для данного подземелья находится в разработке, награда не будет получена. ";
+                        oss << "Лимит времени: " << secsToTimeString(mapData->timeLimit);
+                        oss << ". Текущий таймер: " << secsToTimeString(diff);
                         mapData->receiveLoot = false;
                     }
 
                     if (mapData->penaltyOnDeath > 0)
                     {
                         std::ostringstream oss2;
-                        oss2 << "Dying will result in a penalty of ";
+                        oss2 << "Смерть повлечет за собой штраф в размере ";
                         oss2 << secsToTimeString(mapData->penaltyOnDeath);
                         if (mapData->GetPenaltyTime() > 0)
                         {
-                            oss2 << ". Current penalty: ";
+                            oss2 << ". Текущий штраф: ";
                             oss2 << secsToTimeString(mapData->GetPenaltyTime());
 
-                            oss << ". Current penalty: ";
+                            oss << ". Текущий штраф: ";
                             oss << secsToTimeString(mapData->GetPenaltyTime());
                         }
                         else
-                            oss2 << ". No deaths so far!";
+                            oss2 << ". Вы еще не умирали!";
                         MythicPlus::BroadcastToPlayer(player, MythicPlus::Utils::RedColored(oss2.str()));
                     }
                 }
                 else
-                    oss << "Joined a Mythic Plus dungeon that is already done.";
+                    oss << "Присоеденился к подземелью Мифик+, которое уже пройдено.";
                 MythicPlus::AnnounceToPlayer(player, oss.str());
             }
         }
@@ -137,7 +137,7 @@ public:
             // is no longer M+ capable
             if (savedDungeon != nullptr && savedDungeon->isMythic)
             {
-                MythicPlus::BroadcastToPlayer(player, "This dungeon was saved as Mythic Plus but now it can no longer be Mythic Plus");
+                MythicPlus::BroadcastToPlayer(player, "Это подземелье сохранено нака Мифик+, теперь оно сброшено и не может быть Мифик+");
                 MythicPlus::FallbackTeleport(player);
                 return;
             }
@@ -154,7 +154,7 @@ public:
             {
                 if (mapData->updateTimer / 1000 + mapData->GetPenaltyTime() > mapData->timeLimit)
                 {
-                    MythicPlus::AnnounceToMap(map, "Time's up! You will not receive any Mythic Plus loot anymore.");
+                    MythicPlus::AnnounceToMap(map, "Время вышло! Вы больше не получите ни какой награды.");
                     mapData->receiveLoot = false;
                 }
 

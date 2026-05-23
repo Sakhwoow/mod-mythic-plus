@@ -101,16 +101,16 @@ void HealthIncreaseAffix::HandleStaticEffect(Creature* creature)
 std::string HealthIncreaseAffix::ToString() const
 {
     std::ostringstream oss;
-    oss << "Health increased by ";
+    oss << "Здоровье увеличено на ";
     oss << std::fixed << std::setprecision(2) << healthMod * 100 << "% for ";
     if (GetApplyForTrash() && GetApplyForBosses())
-        oss << "trash and bosses";
+        oss << "для врагов и боссов";
     else if (!GetApplyForTrash())
-        oss << "bosses only";
+        oss << "для боссов";
     else if (!GetApplyForBosses())
-        oss << "trash only";
+        oss << "для врагов";
     else
-        oss << "unknown";
+        oss << "неизвестно";
 
     return oss.str();
 }
@@ -156,17 +156,17 @@ TempSummon* MultipleEnemiesAffix::DoCreateCopy(Creature* creature)
 std::string MultipleEnemiesAffix::ToString() const
 {
     std::ostringstream oss;
-    oss << "Trash enemies can spawn a copy of each other";
+    oss << "Противники могут создавать копии себя";
     oss << " (";
-    oss << MythicPlus::Utils::FormatFloat(chance) << "% chance per each creature)";
-    return oss.str();
+    oss << MythicPlus::Utils::FormatFloat(chance) << "шанс копии %)";
+    return oss.str();противника
 }
 
 std::string MoreDamageForCreaturesAffix::ToString() const
 {
     std::ostringstream oss;
-    oss << "All enemies deal ";
-    oss << MythicPlus::Utils::FormatFloat(perc) << "% more damage";
+    oss << "Все противники наносят на  ";
+    oss << MythicPlus::Utils::FormatFloat(perc) << "% больше урона";
     return oss.str();
 }
 
@@ -216,7 +216,7 @@ void RandomlyExplodeAffix::HandlePeriodicEffect(Unit* unit, uint32 diff)
 
 std::string RandomlyExplodeAffix::ToString() const
 {
-    return "Random explosions deal damage to players";
+    return "Случайные взрывы наносят урон игрокам";
 }
 
 void LightningSphereAffix::HandlePeriodicEffectMap(Map* map, uint32 diff)

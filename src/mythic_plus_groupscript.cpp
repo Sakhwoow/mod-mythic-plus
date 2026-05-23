@@ -25,9 +25,9 @@ public:
             if (player)
             {
                 std::ostringstream oss;
-                oss << "This group's leader has a Mythic Plus level set (level: ";
+                oss << "У лидера этой группы установлен режим Мифик+ (сложность: ";
                 oss << sMythicPlus->GetCurrentMythicPlusLevelForGUID(leaderGuid.GetCounter());
-                oss << ")! Group's leader can use a Mythic Keystone to transform a dungeon into Mythic Plus.";
+                oss << ")! Лидер группы может использовать мифический ключ, чтобы начать прохождение с повышенной сложностью.";
                 MythicPlus::BroadcastToPlayer(player, oss.str());
             }
         }

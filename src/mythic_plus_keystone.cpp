@@ -65,7 +65,7 @@ public:
             }
         }
         else
-            MythicPlus::BroadcastToPlayer(player, "Чтобы использовать ключ необходимо находятся в подземелье с выбранной сложностью Мифик+.");
+            MythicPlus::BroadcastToPlayer(player, "Чтобы использовать ключ необходимо находится в подземелье с выбранной сложностью Мифик+.");
         return true;
     }
 };

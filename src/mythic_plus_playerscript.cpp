@@ -34,7 +34,7 @@ public:
             ObjectGuid leaderGuid = group->GetLeaderGUID();
             uint32 mplusLevel = sMythicPlus->GetCurrentMythicPlusLevelForGUID(leaderGuid.GetCounter());
             if (mplusLevel > 0)
-                MythicPlus::BroadcastToPlayer(player, "Your group's leader (can even be you) has a Mythic Plus level set. The leader can use a Mythic Keystone to start a level " + Acore::ToString(mplusLevel) + " Mythic Plus dungeon!");
+                MythicPlus::BroadcastToPlayer(player, "Лидеру вашей группы присвоена Мифик+ сложность,  " + Acore::ToString(mplusLevel) + " для начала нужно использовать ключ!");
         }
     }
 
@@ -48,9 +48,9 @@ public:
             if (mapData->penaltyOnDeath > 0 && !mapData->done)
             {
                 std::ostringstream oss;
-                oss << player->GetName() << " just died, a penalty of ";
+                oss << player->GetName() << " Если кто то умирает ";
                 oss << secsToTimeString(mapData->penaltyOnDeath);
-                oss << " was applied.";
+                oss << " накладывается штраф.";
 
                 Map* map = player->GetMap();
                 sMythicPlus->BroadcastToMap(player->GetMap(), MythicPlus::Utils::RedColored(oss.str()));
