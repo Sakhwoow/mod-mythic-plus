@@ -102,13 +102,13 @@ std::string HealthIncreaseAffix::ToString() const
 {
     std::ostringstream oss;
     oss << "Здоровье увеличено на ";
-    oss << std::fixed << std::setprecision(2) << healthMod * 100 << "% for ";
+    oss << std::fixed << std::setprecision(2) << healthMod * 100 << "% для ";
     if (GetApplyForTrash() && GetApplyForBosses())
-        oss << "для врагов и боссов";
+        oss << "врагов и боссов";
     else if (!GetApplyForTrash())
         oss << "для боссов";
     else if (!GetApplyForBosses())
-        oss << "для врагов";
+        oss << "врагов";
     else
         oss << "неизвестно";
 
@@ -158,7 +158,7 @@ std::string MultipleEnemiesAffix::ToString() const
     std::ostringstream oss;
     oss << "Противники могут создавать копии себя";
     oss << " (";
-    oss << MythicPlus::Utils::FormatFloat(chance) << "шанс копии %)";
+    oss << MythicPlus::Utils::FormatFloat(chance) << "% шанс копии)";
     return oss.str();
 }
 
@@ -259,10 +259,10 @@ void LightningSphereAffix::HandlePeriodicEffectMap(Map* map, uint32 diff)
 std::string LightningSphereAffix::ToString() const
 {
     std::ostringstream oss;
-    oss << "Периодически вызывает сферы молний, которые наносят огромный урон игрокам, если их быстро не убить [";
+    oss << "Периодически вызывает сферы молний, которые наносят огромный урон игрокам, если их быстро не убить (";
     oss << MythicPlus::Utils::FormatFloat(chanceOfSpawn) << "% появляется в каждом противнике ";
     oss << secsToTimeString(spawnTimerEnd / 1000);
-    oss << "]";
+    oss << ")";
     return oss.str();
 }
 
@@ -366,5 +366,5 @@ void EntanglingRootsAffix::HandlePeriodicEffect(Unit* unit, uint32 diff)
 
 std::string EntanglingRootsAffix::ToString() const
 {
-    return "Находящиеся поблизности враги, могут накладывать на игрока опутывающие корни, замораживать из на месте и наносить урон.";
+    return "Находящиеся поблизности враги, накладывают заморозку, опутывающие корни, которые наносят урон.";
 }
