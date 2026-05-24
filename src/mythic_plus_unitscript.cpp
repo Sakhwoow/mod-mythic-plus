@@ -20,40 +20,61 @@ public:
     }
 
     void OnDamage(Unit* attacker, Unit* victim, uint32& /*damage*/) override
+{
+    if (attacker && victim && attacker->GetMap() == victim->GetMap())
     {
-        if (attacker && victim && attacker->GetMap() == victim->GetMap())
+        Creature* creature = victim->ToCreature();
+        if (!creature || (!creature->IsDungeonBoss() && !sMythicPlus->IsFinalBoss(creature->GetEntry())))
+            return;
+
+        Map* map = victim->GetMap();
+        if (!sMythicPlus->IsMapInMythicPlus(map))
+            return;
+
+        MythicPlus::CreatureData* creatureData = sMythicPlus->GetCreatureData(creature);
+        if (creatureData->engageTimer > 0)
+            return;
+
+        if (!attacker->ToPlayer() && !attacker->IsControlledByPlayer())
+            return;
+
+        creatureData->engageTimer = MythicPlus::Utils::GameTimeCount();
+
+        const Map::PlayerList& playerList = map->GetPlayers();
+        if (playerList.isEmpty())
+            return;
+
+        // Берём имя босса через первого игрока (можно любого)
+        Player* anyPlayer = playerList.begin()->GetSource();
+        const std::string& cname = MythicPlus::Utils::GetCreatureName(anyPlayer, creature);
+
+        // Массив фраз (без подстановки имени, добавим позже)
+        static const std::vector<std::string> rawPhrases = {
+            " - Жалкие глупцы, как вы посмели вторгнуться в мои покои?! Желаю вам сгнить в этой обители!",
+            " - Вы пожалеете о том, что нарушили мой покой! Смерть вам!",
+            " - Ещё одна горстка смертных, ищущих смерть? Что ж, я исполню ваше желание!",
+            " - Ваши души будут вечно служить мне! Атакуйте!",
+            " - Никто не покинет это место живым! Приготовьтесь к гибели!",
+            " - Я сокрушу вас, как хрупкие ветки! Умоляйте о пощаде!",
+            " - Вы думали, что справитесь со мной? Сейчас вы узнаете своё истинное место!",
+            " - Кровь павших украсит эти стены! Начинаем!",
+            " - Какой жалкий вид! Я сотру вас в порошок!",
+            " - Пришло время платить за дерзость! Умрите!"
+        };
+
+        uint32 randomIndex = urand(0, rawPhrases.size() - 1);
+        std::string chosenPhrase = cname + rawPhrases[randomIndex];
+
+        for (Map::PlayerList::const_iterator itr = playerList.begin(); itr != playerList.end(); ++itr)
         {
-            Creature* creature = victim->ToCreature();
-            if (!creature || (!creature->IsDungeonBoss() && !sMythicPlus->IsFinalBoss(creature->GetEntry())))
-                return;
-
-            Map* map = victim->GetMap();
-            if (!sMythicPlus->IsMapInMythicPlus(map))
-                return;
-
-            MythicPlus::CreatureData* creatureData = sMythicPlus->GetCreatureData(creature);
-            if (creatureData->engageTimer > 0)
-                return;
-
-            if (!attacker->ToPlayer() && !attacker->IsControlledByPlayer())
-                return;
-
-            creatureData->engageTimer = MythicPlus::Utils::GameTimeCount();
-
-            const Map::PlayerList& playerList = map->GetPlayers();
-            for (Map::PlayerList::const_iterator itr = playerList.begin(); itr != playerList.end(); ++itr)
+            if (Player* player = itr->GetSource())
             {
-                if (Player* player = itr->GetSource())
-                {
-                    const std::string& cname = MythicPlus::Utils::GetCreatureName(player, creature);
-                    std::ostringstream oss;
-                    oss << "Игрокам " << cname << ". Желаем удачи!";
-                    MythicPlus::AnnounceToPlayer(player, oss.str());
-                    MythicPlus::BroadcastToPlayer(player, oss.str());
-                }
+                MythicPlus::AnnounceToPlayer(player, chosenPhrase);
+                MythicPlus::BroadcastToPlayer(player, chosenPhrase);
             }
         }
     }
+}
 
     void OnUnitDeath(Unit* unit, Unit* killer) override
     {
@@ -84,34 +105,33 @@ public:
                 if (Player* player = itr->GetSource())
                 {
                     const std::string& cname = MythicPlus::Utils::GetCreatureName(player, creature);
-                    std::ostringstream oss;
-                    oss << cname << " был превзойден в " << downAfterStr;
-                    oss << ". Подземельях!";
-                    MythicPlus::AnnounceToPlayer(player, oss.str());
-                    MythicPlus::BroadcastToPlayer(player, oss.str());
+               std::ostringstream oss;
+               oss << cname << " был убит за " << downAfterStr;   // downAfterStr должно содержать время (например, "2 минуты 15 секунд")
+               MythicPlus::AnnounceToPlayer(player, oss.str());
+               MythicPlus::BroadcastToPlayer(player, oss.str());
 
-                    bool finalBoss = sMythicPlus->IsFinalBoss(creature->GetEntry());
-                    bool rewarded = false;
-                    MythicPlus::MapData* mapData = sMythicPlus->GetMapData(map, false);
-                    ASSERT(mapData);
+              bool finalBoss = sMythicPlus->IsFinalBoss(creature->GetEntry());
+              bool rewarded = false;
+               MythicPlus::MapData* mapData = sMythicPlus->GetMapData(map, false);
+                ASSERT(mapData);
 
                     if (finalBoss)
                     {
-                        std::ostringstream oss2;
-                        oss2 << "Подземелье закончилось после ";
-                        oss2 << secsToTimeString(gameTime - savedDungeon->startTime);
-                        MythicPlus::AnnounceToPlayer(player, oss2.str());
-                        MythicPlus::BroadcastToPlayer(player, oss2.str());
+                    std::ostringstream oss2;
+                    oss2 << "Подземелье пройдено за ";
+                    oss2 << secsToTimeString(gameTime - savedDungeon->startTime);
+                    MythicPlus::AnnounceToPlayer(player, oss2.str());
+                     MythicPlus::BroadcastToPlayer(player, oss2.str());
 
-                        if (mapData->receiveLoot)
-                        {
-                            rewarded = true;
-                            sMythicPlus->Reward(player, mapData->mythicLevel->reward);
+                     if (mapData->receiveLoot)
+                     {
+                       rewarded = true;
+                       sMythicPlus->Reward(player, mapData->mythicLevel->reward);
+                      }
+                       mapData->done = true;
+
+                      sMythicPlus->SaveDungeonInfo(map->GetInstanceId(), map->GetId(), mapData->timeLimit, mapData->mythicPlusStartTimer, mapData->mythicLevel->level, mapData->penaltyOnDeath, mapData->deaths, true);
                         }
-                        mapData->done = true;
-
-                        sMythicPlus->SaveDungeonInfo(map->GetInstanceId(), map->GetId(), mapData->timeLimit, mapData->mythicPlusStartTimer, mapData->mythicLevel->level, mapData->penaltyOnDeath, mapData->deaths, true);
-                    }
 
                     const MythicLevel* mythicLevel = sMythicPlus->GetMythicLevel(savedDungeon->mythicLevel);
                     ASSERT(mythicLevel);
@@ -177,7 +197,7 @@ public:
             // prevent cases like Drak'Tharon Keep where dungeon mobs kill each other at the start
             if (killer->ToCreature() != nullptr && !killer->IsControlledByPlayer())
                 return;
-        
+
             MythicPlus::MapData* mapData = sMythicPlus->GetMapData(map);
             // check if a creature was killed by a player and we can be in a M+ dungeon but it was not yet started,
             // in which case we mark this dungeon as non M+

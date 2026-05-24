@@ -46,18 +46,17 @@ public:
                                 if (!sMythicPlus->CheckGroupLevelForKeystone(player))
                                     MythicPlus::BroadcastToPlayer(player, "Все игроки в группе, должны находиться онлайн или иметь подходящий уровень.");
                                 else
-                                {
-                                    mapData->keystoneTimer = MythicPlus::Utils::GameTimeCount();
-                                    mapData->keystoneLevel = sMythicPlus->GetCurrentMythicPlusLevel(player);
-                                    std::ostringstream oss;
-                                    oss << "Mythic Plus will start in ";
-                                    oss << secsToTimeString(MythicPlus::KEYSTONE_START_TIMER / 1000);
-                                    oss << ". Mythic level set: ";
-                                    oss << Acore::ToString(mapData->keystoneLevel);
-                                    MythicPlus::AnnounceToGroup(player, oss.str());
+                               {
+                                mapData->keystoneTimer = MythicPlus::Utils::GameTimeCount();
+                                mapData->keystoneLevel = sMythicPlus->GetCurrentMythicPlusLevel(player);
+                                 std::ostringstream oss;
+                                 oss << "Через " << secsToTimeString(MythicPlus::KEYSTONE_START_TIMER / 1000)
+                                 << " запустится испытание Мифик+, текущая сложность М+ "
+                                  << Acore::ToString(mapData->keystoneLevel);
+                                 MythicPlus::AnnounceToGroup(player, oss.str());
 
-                                    sMythicPlus->RemoveKeystone(player);
-                                }
+                                  sMythicPlus->RemoveKeystone(player);
+                                 }
                             }
                         }
                     }

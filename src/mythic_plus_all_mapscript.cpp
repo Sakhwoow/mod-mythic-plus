@@ -46,7 +46,7 @@ public:
         }
 
         if (sMythicPlus->CanMapBeMythicPlus(map))
-        { 
+        {
             if (savedDungeon != nullptr)
             {
                 if (!savedDungeon->isMythic)
@@ -173,39 +173,39 @@ public:
                 if (mapData != nullptr && mapData->keystoneTimer > 0 && mapData->mythicPlusStartTimer == 0)
                 {
                     uint32 instanceId = map->GetInstanceId();
-                    
+
                     if (instanceTimer[instanceId] > MythicPlus::KEYSTONE_START_TIMER)
                     {
-                        const MythicPlus::MythicPlusDungeonInfo* dsave = sMythicPlus->GetSavedDungeonInfo(instanceId);
-                        if (dsave != nullptr)
-                        {
-                            // at this point there shouldn't be any dungeon save available, it pretty much means the dungeon is saved as non M+
-                            return;
-                        }
+    const MythicPlus::MythicPlusDungeonInfo* dsave = sMythicPlus->GetSavedDungeonInfo(instanceId);
+    if (dsave != nullptr)
+    {
+        // на этот момент не должно быть сохранённого подземелья, это значит, что подземелье сохранено как не M+
+        return;
+    }
 
-                        mapData->mythicPlusStartTimer = MythicPlus::Utils::GameTimeCount();
+    mapData->mythicPlusStartTimer = MythicPlus::Utils::GameTimeCount();
 
-                        const MythicLevel* mythicLevel = sMythicPlus->GetMythicLevel(mapData->keystoneLevel);
-                        ASSERT(mythicLevel);
+    const MythicLevel* mythicLevel = sMythicPlus->GetMythicLevel(mapData->keystoneLevel);
+    ASSERT(mythicLevel);
 
-                        std::ostringstream oss;
-                        oss << "Mythic Plus timer started! ";
-                        oss << "Beat this timer to get loot: " << secsToTimeString(mythicLevel->timeLimit) << ". ";
-                        oss << "Have fun!";
-                        MythicPlus::AnnounceToMap(map, oss.str());
+    std::ostringstream oss;
+    oss << "Таймер Mythic Plus запущен! ";
+    oss << "Уложитесь в это время, чтобы получить награду: " << secsToTimeString(mythicLevel->timeLimit) << ". ";
+    oss << "Приятной игры!";
+    MythicPlus::AnnounceToMap(map, oss.str());
 
-                        uint32 timeLimit = mythicLevel->timeLimit;
-                        uint32 mlevel = mythicLevel->level;
-                        sMythicPlus->SaveDungeonInfo(instanceId, map->GetId(), timeLimit, mapData->mythicPlusStartTimer, mlevel, sMythicPlus->GetPenaltyOnDeath(), 0, false);
+    uint32 timeLimit = mythicLevel->timeLimit;
+    uint32 mlevel = mythicLevel->level;
+    sMythicPlus->SaveDungeonInfo(instanceId, map->GetId(), timeLimit, mapData->mythicPlusStartTimer, mlevel, sMythicPlus->GetPenaltyOnDeath(), 0, false);
 
-                        mapData->mythicLevel = mythicLevel;
-                        mapData->timeLimit = timeLimit;
-                        mapData->deaths = 0;
-                        mapData->penaltyOnDeath = sMythicPlus->GetPenaltyOnDeath();
+    mapData->mythicLevel = mythicLevel;
+    mapData->timeLimit = timeLimit;
+    mapData->deaths = 0;
+    mapData->penaltyOnDeath = sMythicPlus->GetPenaltyOnDeath();
 
-                        if (mapData->penaltyOnDeath > 0)
-                            sMythicPlus->BroadcastToMap(map, MythicPlus::Utils::RedColored("Dying will give a penalty of " + secsToTimeString(mapData->penaltyOnDeath)));
-                    }
+    if (mapData->penaltyOnDeath > 0)
+        sMythicPlus->BroadcastToMap(map, MythicPlus::Utils::RedColored("Смерть будет добавлять штраф: " + secsToTimeString(mapData->penaltyOnDeath)));
+}
                     else
                         instanceTimer[instanceId] += diff;
                 }

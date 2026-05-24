@@ -48,15 +48,16 @@ public:
             if (mapData->penaltyOnDeath > 0 && !mapData->done)
             {
                 std::ostringstream oss;
-                oss << player->GetName() << " Если кто то умирает ";
+                oss << player->GetName() << " - Погиб!";
+                oss << " На группу накладывается штраф времени, минус ";
                 oss << secsToTimeString(mapData->penaltyOnDeath);
-                oss << " накладывается штраф.";
+
 
                 Map* map = player->GetMap();
                 sMythicPlus->BroadcastToMap(player->GetMap(), MythicPlus::Utils::RedColored(oss.str()));
 
                 mapData->deaths++;
-                
+
                 sMythicPlus->SaveDungeonInfo(map->GetInstanceId(), map->GetId(), mapData->timeLimit, mapData->mythicPlusStartTimer, mapData->mythicLevel->level, mapData->penaltyOnDeath, mapData->deaths, mapData->done);
             }
         }
