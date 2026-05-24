@@ -159,7 +159,7 @@ std::string MultipleEnemiesAffix::ToString() const
     oss << "Противники могут создавать копии себя";
     oss << " (";
     oss << MythicPlus::Utils::FormatFloat(chance) << "шанс копии %)";
-    return oss.str();противника
+    return oss.str();
 }
 
 std::string MoreDamageForCreaturesAffix::ToString() const
