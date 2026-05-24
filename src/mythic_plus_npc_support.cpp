@@ -435,96 +435,96 @@ void MythicPlusNpcSupport::AddMythicPlusDungeonSnapshotDetails(Player* player, u
     const MythicPlus::MythicPlusDungeonSnapshot* csnap = &chosenSnaps.at(0);
 
     Identifier* idnt = new Identifier();
-    idnt->id = 1;
-    std::ostringstream oss;
-    oss << "Прохождение ";
-    oss << map->name[locale];
-    oss << "М+";
-    oss << csnap->mythicLevel;
+idnt->id = 1;
+std::ostringstream oss;
+oss << "Подземелье: ";
+oss << map->name[locale];
+oss << " Сложность М+";
+oss << csnap->mythicLevel;
+idnt->uiName = oss.str();
+pagedData.data.push_back(idnt);
+
+oss.str("");
+oss.clear();
+
+Identifier* startTimeIdnt = new Identifier();
+startTimeIdnt->id = 2;
+oss << "Начато: ";
+oss << MythicPlus::Utils::DateFromSeconds(csnap->startTime);
+startTimeIdnt->uiName = oss.str();
+pagedData.data.push_back(startTimeIdnt);
+
+oss.str("");
+oss.clear();
+
+Identifier* endTimeIdnt = new Identifier();
+endTimeIdnt->id = 3;
+if (csnap->totalTime > 0)
+{
+    oss << "Завершено: ";
+    oss << MythicPlus::Utils::DateFromSeconds(csnap->endTime);
+    oss << "\n";  // новая строка
+    oss << "Длительность: ";
+    oss << secsToTimeString(csnap->totalTime);
+}
+else
+    oss << MythicPlus::Utils::RedColored("Не удалось пройти");
+endTimeIdnt->uiName = oss.str();
+pagedData.data.push_back(endTimeIdnt);
+
+oss.str("");
+oss.clear();
+
+Identifier* deathsIdnt = new Identifier();
+deathsIdnt->id = 4;
+if (csnap->totalDeaths > 0)
+{
+    oss << "Смертей: ";
+    oss << MythicPlus::Utils::RedColored(Acore::ToString(csnap->totalDeaths));
+    oss << "\n";  // новая строка
+    oss << "Штрафное время: ";
+    oss << secsToTimeString(csnap->penaltyOnDeath * csnap->totalDeaths);
+}
+else
+    oss << MythicPlus::Utils::GreenColored("Без смертей");
+deathsIdnt->uiName = oss.str();
+pagedData.data.push_back(deathsIdnt);
+
+uint32 id = 4;
+for (const auto& s : chosenSnaps)
+{
+    oss.str("");
+    oss.clear();
+
+    oss << MythicPlus::Utils::Colored(MythicPlus::Utils::GetCreatureNameByEntry(player, s.entry), "102163");
+    oss << " - повержен ";
+    oss << MythicPlus::Utils::DateFromSeconds(s.snapTime);
+    oss << "\n";  // новая строка
+    oss << "Время сражения: ";
+    oss << secsToTimeString(s.combatTime);
+    oss << "\n";  // новая строка
+    oss << "Игроки: ";
+    oss << MythicPlus::Utils::Colored(s.players, "6e1849");
+
+    if (s.randomAffixCount > 0)
+        oss << "\nСлучайное усиление: " << s.randomAffixCount;
+
+    Identifier* idnt = new Identifier();
+    idnt->id = ++id;
     idnt->uiName = oss.str();
     pagedData.data.push_back(idnt);
+}
 
-    oss.str("");
-    oss.clear();
-
-    Identifier* startTimeIdnt = new Identifier();
-    startTimeIdnt->id = 2;
-    oss << "Начало: ";
-    oss << MythicPlus::Utils::DateFromSeconds(csnap->startTime);
-    oss << "";
-    startTimeIdnt->uiName = oss.str();
-    pagedData.data.push_back(startTimeIdnt);
-
-    oss.str("");
-    oss.clear();
-
-    Identifier* endTimeIdnt = new Identifier();
-    endTimeIdnt->id = 3;
-    if (csnap->totalTime > 0)
-    {
-        oss << "Конец: ";
-        oss << MythicPlus::Utils::DateFromSeconds(csnap->endTime);
-        oss << "";
-        oss << "Длительность: ";
-        oss << secsToTimeString(csnap->totalTime);
-        oss << "";
-    }
+if (csnap->totalTime > 0)
+{
+    Identifier* rewardIdnt = new Identifier();
+    rewardIdnt->id = ++id;
+    if (csnap->rewarded)
+        rewardIdnt->uiName = MythicPlus::Utils::GreenColored("ВРЕМЯ НЕ ВЫШЛО - НАГРАДЫ ПОЛУЧЕНЫ");
     else
-        oss << MythicPlus::Utils::RedColored("Прохождение не состоялось(потерянный экземпляр)");
-    endTimeIdnt->uiName = oss.str();
-    pagedData.data.push_back(endTimeIdnt);
-
-    Identifier* deathsIdnt = new Identifier();
-    deathsIdnt->id = 4;
-    oss.str("");
-    oss.clear();
-    if (csnap->totalDeaths > 0)
-    {
-        oss << "Смерть: ";
-        oss << MythicPlus::Utils::RedColored(Acore::ToString(csnap->totalDeaths));
-        oss << "Штрафное время: ";
-        oss << secsToTimeString(csnap->penaltyOnDeath * csnap->totalDeaths);
-    }
-    else
-        oss << MythicPlus::Utils::GreenColored("Без смертей");
-    deathsIdnt->uiName = oss.str();
-    pagedData.data.push_back(deathsIdnt);
-
-    uint32 id = 4;
-    for (const auto& s : chosenSnaps)
-    {
-        oss.str("");
-        oss.clear();
-
-        oss << MythicPlus::Utils::Colored(MythicPlus::Utils::GetCreatureNameByEntry(player, s.entry), "102163");
-        oss << "- повержен";
-        oss << MythicPlus::Utils::DateFromSeconds(s.snapTime);
-        oss << " время боя ";
-        oss << secsToTimeString(s.combatTime);
-        oss << "";
-        oss << " Игроки: ";
-        oss << MythicPlus::Utils::Colored(s.players, "6e1849");
-        oss << "";
-
-        if (s.randomAffixCount > 0)
-            oss << " Случайное усиление: " << s.randomAffixCount << "";
-
-        Identifier* idnt = new Identifier();
-        idnt->id = ++id;
-        idnt->uiName = oss.str();
-        pagedData.data.push_back(idnt);
-    }
-
-    if (csnap->totalTime > 0)
-    {
-        Identifier* rewardIdnt = new Identifier();
-        rewardIdnt->id = ++id;
-        if (csnap->rewarded)
-            rewardIdnt->uiName = MythicPlus::Utils::GreenColored("ВРЕМЯ НЕ ВЫШЛО - НАГРАДЫ ПОЛУЧЕНЫ");
-        else
-            rewardIdnt->uiName = MythicPlus::Utils::RedColored("НАГРАДЫ НЕ ПОЛУЧЕНЫ - ПРЕВЫШЕН ЛИМИТ ВРЕМЕНИ");
-        pagedData.data.push_back(rewardIdnt);
-    }
+        rewardIdnt->uiName = MythicPlus::Utils::RedColored("НАГРАДЫ НЕ ПОЛУЧЕНЫ - ПРЕВЫШЕН ЛИМИТ ВРЕМЕНИ");
+    pagedData.data.push_back(rewardIdnt);
+}
 
     pagedData.SortAndCalculateTotals(CompareIdentifierById);
 }
