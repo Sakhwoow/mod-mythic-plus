@@ -41,7 +41,7 @@ public:
         creatureData->engageTimer = MythicPlus::Utils::GameTimeCount();
 
         const Map::PlayerList& playerList = map->GetPlayers();
-        if (playerList.isEmpty())
+        if (playerList.empty())
             return;
 
         // Берём имя босса через первого игрока (можно любого)
