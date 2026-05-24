@@ -213,7 +213,7 @@ void MythicPlusNpcSupport::AddMythicPlusLevelInfo(Player* player, uint32 mythicL
             tokenIdnt->optionIcon = GOSSIP_ICON_VENDOR;
             std::ostringstream oss;
             oss << MythicPlus::Utils::ItemLinkForUI(token.first, player);
-            oss << " - " "x"<< token.second << ;
+            oss << " - x" << token.second;
             tokenIdnt->uiName = oss.str();
             pagedData.data.push_back(tokenIdnt);
         }
@@ -243,7 +243,6 @@ void MythicPlusNpcSupport::AddMythicPlusDungeonList(Player* player)
         idnt->id = ++id;
         std::ostringstream oss;
         oss << map->name[locale];
-        oss << ;
         if (diff == DUNGEON_DIFFICULTY_NORMAL)
         {
             if (MythicPlus::Utils::CanBeHeroic(mapEntry))
